@@ -1,36 +1,16 @@
-
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>เล่นเกม | เขียนให้ถูก!</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="questions.js" defer></script>
-  <script src="game.js" defer></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Pridi:wght@500;700&family=Sarabun:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<title>กำลังเล่น | ปากกาแดง</title>
 </head>
 <body>
-  <main class="card">
-    <a href="index.html" class="back">← กลับหน้าแรก</a>
-    <h1>🎮 มาเล่นกัน!</h1>
-
-    <div class="info">
-      <span id="count">ข้อ 1/10</span>
-      <span id="score">คะแนน 0</span>
-    </div>
-
-    <div class="progress">
-      <div id="bar"></div>
-    </div>
-
-    <h2 id="question">คำไหนเขียนถูกต้อง?</h2>
-    <div id="options" class="options"></div>
-    <div id="feedback" aria-live="polite"></div>
-
-    <button id="next" class="btn hidden">
-      ข้อต่อไป ➜
-    </button>
-  </main>
+<main id="app"></main>
+<script src="questions.js"></script>
+<script src="game.js"></script>
 </body>
 </html>
-
