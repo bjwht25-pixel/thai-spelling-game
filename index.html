@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>เขียนผิดได้ไง!</title>
+    <title>คนไทยNative - เกมทายคำไทยมักเขียนผิด</title>
     
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&family=Prompt:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&family=Prompt:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
@@ -18,16 +19,12 @@
             theme: {
                 extend: {
                     colors: {
-                        pastelBg: '#F3E8FF',
-                        pastelCard: '#FFFFFF',
-                        pastelPink: '#FFB7B2',
-                        pastelGreen: '#C7CEEA',
-                        pastelYellow: '#E2F0CB',
-                        mint: '#A8E6CF',
-                        softRed: '#FF8B94',
-                        softGreen: '#67C5A3',
-                        purplePrimary: '#8B5CF6',
-                        purpleDark: '#7C3AED'
+                        pastelPurple: '#8B5CF6',
+                        pastelDarkPurple: '#6D28D9',
+                        pastelPink: '#EC4899',
+                        pastelYellow: '#F59E0B',
+                        pastelGreen: '#10B981',
+                        pastelRed: '#EF4444'
                     },
                     fontFamily: {
                         kanit: ['Kanit', 'sans-serif'],
@@ -43,164 +40,228 @@
             font-family: 'Kanit', sans-serif;
             background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
             min-height: 100vh;
+            user-select: none;
         }
 
         .glass-card {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 2px solid rgba(255, 255, 255, 0.6);
-            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.08);
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 2px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
         }
 
         .btn-bounce {
-            transition: all 0.2s ease;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         .btn-bounce:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 12px 20px -5px rgba(139, 92, 246, 0.3);
         }
         .btn-bounce:active {
             transform: translateY(1px) scale(0.98);
         }
 
-        /* Pulse animation for timer */
         @keyframes pulse-fast {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.1); }
         }
         .timer-warning {
-            animation: pulse-fast 0.6s infinite;
+            animation: pulse-fast 0.5s infinite;
             color: #EF4444 !important;
+            background-color: #FEE2E2 !important;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(2deg); }
+        }
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
         }
 
         /* Custom scrollbar */
         ::-webkit-scrollbar {
-            width: 8px;
+            width: 6px;
         }
         ::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.3);
             border-radius: 10px;
         }
         ::-webkit-scrollbar-thumb {
-            background: #A78BFA;
+            background: #C4B5FD;
             border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #A78BFA;
         }
     </style>
 </head>
-<body class="flex items-center justify-center p-4 min-h-screen">
+<body class="flex items-center justify-center p-3 sm:p-6 min-h-screen">
 
-    <div id="app" class="w-full max-w-lg">
+    <div id="app" class="w-full max-w-lg my-auto">
 
+        <!-- ================= START SCREEN ================= -->
         <div id="start-screen" class="glass-card rounded-3xl p-6 sm:p-8 text-center animate__animated animate__fadeIn">
-            <h1 class="text-3xl sm:text-4xl font-bold text-gray-800 mb-2 font-prompt">คนไทยNative</h1>
-            <p class="text-gray-600 mb-6 text-sm sm:text-base">ทดสอบความเป็นคนไทยในตัวคุณ</p>
+            
+            <!-- Mascot SVG Avatar -->
+            <div id="mascot-container" class="w-28 h-28 mx-auto mb-3 animate-float relative cursor-pointer" onclick="pokeMascot()">
+                <svg id="mascot-svg" viewBox="0 0 200 200" class="w-full h-full drop-shadow-md">
+                    <!-- Body -->
+                    <circle cx="100" cy="105" r="75" fill="#8B5CF6"/>
+                    <circle cx="100" cy="115" r="50" fill="#F3E8FF"/>
+                    <!-- Eyes -->
+                    <circle cx="75" cy="85" r="18" fill="white"/>
+                    <circle cx="125" cy="85" r="18" fill="white"/>
+                    <circle id="pupil-l" cx="78" cy="85" r="8" fill="#1E1B4B"/>
+                    <circle id="pupil-r" cx="122" cy="85" r="8" fill="#1E1B4B"/>
+                    <circle cx="81" cy="82" r="3" fill="white"/>
+                    <circle cx="125" cy="82" r="3" fill="white"/>
+                    <!-- Beak / Mouth -->
+                    <polygon id="mascot-beak" points="100,95 90,110 110,110" fill="#F59E0B"/>
+                    <!-- Cheeks -->
+                    <ellipse cx="60" cy="105" rx="10" ry="6" fill="#F472B6" opacity="0.6"/>
+                    <ellipse cx="140" cy="105" rx="10" ry="6" fill="#F472B6" opacity="0.6"/>
+                    <!-- Wings -->
+                    <path d="M 25 105 Q 15 130 35 135 Z" fill="#7C3AED"/>
+                    <path d="M 175 105 Q 185 130 165 135 Z" fill="#7C3AED"/>
+                </svg>
+            </div>
+
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-800 mb-1 font-prompt tracking-tight">
+                คนไทย<span class="text-purple-600">Native</span> 🇹🇭
+            </h1>
+            <p class="text-gray-600 mb-5 text-sm sm:text-base">ทดสอบความเป๊ะ! คำไทยคำไหนเขียนถูกต้อง?</p>
 
             <form id="start-form" onsubmit="startGame(event)" class="space-y-4">
                 <div class="text-left">
-                    <label for="player-name" class="block text-sm font-semibold text-gray-700 mb-1 ml-1">กรอกชื่อของคุณ</label>
+                    <label for="player-name" class="block text-sm font-bold text-gray-700 mb-1 ml-1">ชื่อผู้เล่น</label>
                     <div class="relative">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-400">
-                            <i class="fa-solid fa-user"></i>
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-purple-400">
+                            <i class="fa-solid fa-user-astronaut text-lg"></i>
                         </span>
-                        <input type="text" id="player-name" required maxlength="15" placeholder="น้องชื่ออะไร" 
-                            class="w-full pl-10 pr-4 py-3 rounded-2xl border-2 border-purple-200 focus:border-purple-500 focus:outline-none transition-colors bg-white/80 text-gray-800 text-lg">
+                        <input type="text" id="player-name" required maxlength="15" placeholder="ใส่ชื่อของคุณที่นี่..." 
+                            class="w-full pl-11 pr-4 py-3 rounded-2xl border-2 border-purple-200 focus:border-purple-500 focus:outline-none transition-all bg-white/90 text-gray-800 font-semibold text-lg shadow-inner">
                     </div>
                 </div>
 
-                <button type="submit" class="w-full py-3.5 px-6 bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white font-bold text-lg rounded-2xl shadow-lg btn-bounce flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-play"></i> เริ่ม!
+                <button type="submit" class="w-full py-4 px-6 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold text-lg rounded-2xl shadow-lg btn-bounce flex items-center justify-center gap-2 tracking-wide">
+                    <i class="fa-solid fa-play"></i> เริ่มเล่นเกม!
                 </button>
             </form>
 
-            <div class="mt-8 pt-6 border-t border-purple-100">
-                <div class="flex items-center justify-between mb-3">
-                    <h3 class="font-semibold text-gray-700 flex items-center gap-2">
-                        <i class="fa-solid fa-trophy text-yellow-500"></i> ใครคือคนไทยคนแรก
+            <!-- Leaderboard Preview -->
+            <div class="mt-6 pt-5 border-t border-purple-100">
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="font-bold text-gray-700 flex items-center gap-2 text-sm">
+                        <i class="fa-solid fa-trophy text-amber-500"></i> อันดับสูงสุด (Top 5)
                     </h3>
-                    <button onclick="clearLeaderboard()" class="text-xs text-gray-400 hover:text-red-500 underline">ล้างสถิติ</button>
+                    <button onclick="clearLeaderboard()" class="text-xs text-gray-400 hover:text-red-500 transition-colors">
+                        <i class="fa-solid fa-trash-can"></i> ล้างสถิติ
+                    </button>
                 </div>
-                <div id="start-leaderboard" class="space-y-2 text-sm text-gray-600 max-h-40 overflow-y-auto pr-1">
+                <div id="start-leaderboard" class="space-y-1.5 text-sm text-gray-600 max-h-36 overflow-y-auto pr-1">
+                    <!-- Dynamic Rows -->
                 </div>
             </div>
         </div>
 
+        <!-- ================= GAME SCREEN ================= -->
         <div id="game-screen" class="glass-card rounded-3xl p-6 sm:p-8 hidden">
-            <!-- Top Bar: Progress & Timer -->
-            <div class="flex items-center justify-between mb-4">
-                <div class="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1.5">
-                    <i class="fa-solid fa-list-check"></i> ข้อที่ <span id="current-question-num">1</span>/10
+            <!-- Top Bar: Question Count & Timer & Score -->
+            <div class="flex items-center justify-between mb-3 gap-2">
+                <div class="bg-purple-100/90 text-purple-800 px-3 py-1.5 rounded-full text-xs sm:text-sm font-bold flex items-center gap-1.5 shadow-sm">
+                    <i class="fa-solid fa-layer-group"></i> ข้อ <span id="current-question-num">1</span>/10
                 </div>
-                <div id="timer-container" class="flex items-center gap-2 bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full font-bold text-base transition-all">
+
+                <div id="timer-container" class="flex items-center gap-1.5 bg-amber-100 text-amber-800 px-3.5 py-1.5 rounded-full font-black text-sm sm:text-base transition-all shadow-sm">
                     <i class="fa-solid fa-stopwatch animate-spin"></i> <span id="timer-text">10</span>s
                 </div>
-                <div class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1.5">
-                    <i class="fa-solid fa-star text-yellow-500"></i> <span id="current-score">0</span> คะแนน
+
+                <div class="bg-emerald-100/90 text-emerald-800 px-3 py-1.5 rounded-full text-xs sm:text-sm font-bold flex items-center gap-1.5 shadow-sm">
+                    <i class="fa-solid fa-star text-amber-500"></i> <span id="current-score">0</span>
                 </div>
             </div>
 
             <!-- Progress Bar -->
-            <div class="w-full bg-gray-200 h-2.5 rounded-full mb-6 overflow-hidden">
-                <div id="progress-bar" class="bg-gradient-to-r from-purple-500 to-indigo-500 h-2.5 rounded-full transition-all duration-300" style="width: 10%"></div>
+            <div class="w-full bg-gray-200/80 h-3 rounded-full mb-4 overflow-hidden p-0.5 border border-white">
+                <div id="progress-bar" class="bg-gradient-to-r from-purple-500 to-pink-500 h-full rounded-full transition-all duration-300" style="width: 10%"></div>
+            </div>
+
+            <!-- Streak Badge (Floating Combo) -->
+            <div id="streak-container" class="h-8 flex items-center justify-center mb-1">
+                <span id="streak-badge" class="hidden bg-gradient-to-r from-amber-500 to-rose-500 text-white text-xs font-black px-3 py-1 rounded-full shadow-md animate__animated animate__bounceIn">
+                    🔥 COMBO x<span id="streak-count">2</span> (+<span id="streak-bonus">20</span>pt)
+                </span>
             </div>
 
             <!-- Question Area -->
-            <div class="text-center my-6">
-                <p class="text-xs font-semibold text-purple-600 uppercase tracking-wider mb-1">เลือกคำที่เขียนสะกดถูกต้อง</p>
-                <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 font-prompt">คำไหนสะกดถูกต้อง?</h2>
+            <div class="text-center my-3">
+                <p class="text-xs font-bold text-purple-600 uppercase tracking-widest mb-1">สะกดถูกต้องตามพจนานุกรม</p>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-800 font-prompt">คำไหนเขียนถูกต้อง?</h2>
             </div>
 
-            <!-- Options (2 choices) -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 my-6" id="options-container">
-                <button id="btn-opt-0" onclick="selectAnswer(0)" class="option-btn py-5 px-4 bg-white hover:bg-purple-50 border-2 border-purple-200 rounded-2xl text-xl font-bold text-gray-800 shadow-sm transition-all btn-bounce flex items-center justify-center gap-2">
+            <!-- Options Container -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 my-5" id="options-container">
+                <button id="btn-opt-0" onclick="selectAnswer(0)" class="option-btn py-4 px-4 bg-white hover:bg-purple-50 border-2 border-purple-200 rounded-2xl text-xl font-bold text-gray-800 shadow-sm transition-all btn-bounce flex items-center justify-center gap-2">
                     <span>คำเลือก A</span>
                 </button>
-                <button id="btn-opt-1" onclick="selectAnswer(1)" class="option-btn py-5 px-4 bg-white hover:bg-purple-50 border-2 border-purple-200 rounded-2xl text-xl font-bold text-gray-800 shadow-sm transition-all btn-bounce flex items-center justify-center gap-2">
+                <button id="btn-opt-1" onclick="selectAnswer(1)" class="option-btn py-4 px-4 bg-white hover:bg-purple-50 border-2 border-purple-200 rounded-2xl text-xl font-bold text-gray-800 shadow-sm transition-all btn-bounce flex items-center justify-center gap-2">
                     <span>คำเลือก B</span>
                 </button>
             </div>
 
             <!-- Feedback Message Box -->
             <div id="feedback-box" class="mt-4 p-4 rounded-2xl hidden animate__animated animate__fadeIn">
-                <div id="feedback-title" class="font-bold text-lg mb-1 flex items-center gap-2"></div>
-                <div id="feedback-desc" class="text-sm text-gray-700"></div>
+                <div id="feedback-title" class="font-bold text-base sm:text-lg mb-1 flex items-center gap-2"></div>
+                <div id="feedback-desc" class="text-xs sm:text-sm text-gray-700 leading-relaxed"></div>
             </div>
         </div>
 
         <!-- ================= RESULT SCREEN ================= -->
         <div id="result-screen" class="glass-card rounded-3xl p-6 sm:p-8 text-center hidden animate__animated animate__fadeIn">
-            <div id="result-icon-container" class="inline-block p-4 bg-yellow-100 rounded-full mb-3 text-yellow-500 text-5xl">
+            <div id="result-icon-container" class="inline-block p-4 bg-amber-100 rounded-full mb-2 text-amber-500 text-5xl">
                 <i class="fa-solid fa-crown animate__animated animate__tada"></i>
             </div>
             
-            <h2 id="result-badge" class="text-2xl sm:text-3xl font-bold text-gray-800 mb-1 font-prompt">สุดยอดมาก!</h2>
-            <p id="result-player-name" class="text-purple-600 font-semibold mb-4 text-lg">คุณนกฮูก</p>
+            <h2 id="result-badge" class="text-2xl sm:text-3xl font-black text-gray-800 mb-0.5 font-prompt">สุดยอดมาก!</h2>
+            <p id="result-player-name" class="text-purple-600 font-bold mb-4 text-base">ผู้เล่น: คุณนกฮูก</p>
 
             <!-- Score Cards -->
-            <div class="grid grid-cols-3 gap-2 sm:gap-3 mb-6">
-                <div class="bg-purple-50 p-3 rounded-2xl border border-purple-100">
-                    <p class="text-xs text-gray-500">ตอบถูก</p>
-                    <p class="text-xl sm:text-2xl font-bold text-purple-700" id="res-correct-count">0/10</p>
+            <div class="grid grid-cols-3 gap-2 sm:gap-3 mb-5">
+                <div class="bg-purple-50/90 p-3 rounded-2xl border border-purple-100 shadow-sm">
+                    <p class="text-xs font-semibold text-gray-500">ตอบถูก</p>
+                    <p class="text-lg sm:text-2xl font-black text-purple-700" id="res-correct-count">0/10</p>
                 </div>
-                <div class="bg-indigo-50 p-3 rounded-2xl border border-indigo-100">
-                    <p class="text-xs text-gray-500">คะแนนรวม</p>
-                    <p class="text-xl sm:text-2xl font-bold text-indigo-700" id="res-total-score">0</p>
+                <div class="bg-indigo-50/90 p-3 rounded-2xl border border-indigo-100 shadow-sm">
+                    <p class="text-xs font-semibold text-gray-500">คะแนนรวม</p>
+                    <p class="text-lg sm:text-2xl font-black text-indigo-700" id="res-total-score">0</p>
                 </div>
-                <div class="bg-pink-50 p-3 rounded-2xl border border-pink-100">
-                    <p class="text-xs text-gray-500">เวลารวม</p>
-                    <p class="text-xl sm:text-2xl font-bold text-pink-600" id="res-time-used">0s</p>
+                <div class="bg-pink-50/90 p-3 rounded-2xl border border-pink-100 shadow-sm">
+                    <p class="text-xs font-semibold text-gray-500">เวลารวม</p>
+                    <p class="text-lg sm:text-2xl font-black text-pink-600" id="res-time-used">0s</p>
                 </div>
             </div>
 
+            <!-- Action Buttons Row -->
+            <div class="grid grid-cols-2 gap-2 mb-5">
+                <button onclick="toggleReviewModal()" class="py-2.5 px-3 bg-purple-100 hover:bg-purple-200 text-purple-800 font-bold text-xs sm:text-sm rounded-xl transition-all flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-book-open"></i> ดูเฉลยละเอียด
+                </button>
+                <button onclick="shareScore()" class="py-2.5 px-3 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-bold text-xs sm:text-sm rounded-xl transition-all flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-share-nodes"></i> แชร์ท้าเพื่อน
+                </button>
+            </div>
+
             <!-- Leaderboard Table -->
-            <div class="mb-6 text-left">
-                <h3 class="font-bold text-gray-800 mb-3 flex items-center gap-2 text-base">
+            <div class="mb-5 text-left">
+                <h3 class="font-bold text-gray-800 mb-2 flex items-center gap-2 text-sm">
                     <i class="fa-solid fa-ranking-star text-purple-600"></i> ตารางคะแนนสูงสุด
                 </h3>
-                <div class="bg-white/80 rounded-2xl p-3 border border-purple-100 max-h-48 overflow-y-auto">
-                    <table class="w-full text-sm text-left">
+                <div class="bg-white/80 rounded-2xl p-2.5 border border-purple-100 max-h-40 overflow-y-auto shadow-inner">
+                    <table class="w-full text-xs sm:text-sm text-left">
                         <thead>
-                            <tr class="text-xs text-gray-400 border-b border-gray-100 pb-2">
+                            <tr class="text-gray-400 border-b border-gray-100 text-[11px]">
                                 <th class="py-1">อันดับ</th>
                                 <th class="py-1">ชื่อผู้เล่น</th>
                                 <th class="py-1 text-center">คะแนน</th>
@@ -208,100 +269,169 @@
                             </tr>
                         </thead>
                         <tbody id="leaderboard-body" class="divide-y divide-gray-100">
-                            <!-- Dynamic Leaderboard Rows -->
+                            <!-- Dynamic Rows -->
                         </tbody>
                     </table>
                 </div>
             </div>
 
             <!-- Restart Button -->
-            <button onclick="resetGameToStart()" class="w-full py-3.5 px-6 bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white font-bold text-lg rounded-2xl shadow-lg btn-bounce flex items-center justify-center gap-2">
-                <i class="fa-solid fa-rotate-right"></i> เล่นอีกครั้ง 
+            <button onclick="resetGameToStart()" class="w-full py-3.5 px-6 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold text-base rounded-2xl shadow-lg btn-bounce flex items-center justify-center gap-2">
+                <i class="fa-solid fa-rotate-right"></i> เล่นอีกครั้ง
             </button>
         </div>
 
     </div>
 
-    <!-- AUDIO SYNTHESIS (Web Audio API - No external sounds needed) -->
+    <!-- ================= REVIEW MODAL ================= -->
+    <div id="review-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl p-5 sm:p-6 max-w-lg w-full max-h-[85vh] flex flex-col shadow-2xl animate__animated animate__zoomIn">
+            <div class="flex justify-between items-center pb-3 border-b border-gray-100">
+                <h3 class="font-bold text-lg text-gray-800 flex items-center gap-2 font-prompt">
+                    <i class="fa-solid fa-book-bookmark text-purple-600"></i> สรุปคำศัพท์รอบนี้
+                </h3>
+                <button onclick="toggleReviewModal()" class="text-gray-400 hover:text-gray-600 w-8 h-8 rounded-full flex items-center justify-center">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            
+            <div id="review-list" class="my-4 overflow-y-auto space-y-3 pr-1 text-left flex-1">
+                <!-- Dynamic Review Items -->
+            </div>
+
+            <button onclick="toggleReviewModal()" class="w-full py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl text-sm transition-colors mt-2">
+                ปิดหน้าต่าง
+            </button>
+        </div>
+    </div>
+
+    <!-- AUDIO SYNTHESIS (Web Audio API) -->
     <script>
-        // Sound FX using Web Audio API
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
         function playSound(type) {
             if (audioCtx.state === 'suspended') {
                 audioCtx.resume();
             }
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-
             const now = audioCtx.currentTime;
 
             if (type === 'correct') {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
                 osc.type = 'sine';
                 osc.frequency.setValueAtTime(523.25, now); // C5
-                osc.frequency.exponentialRampToValueAtTime(880, now + 0.2); // A5
-                gain.gain.setValueAtTime(0.3, now);
-                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                osc.frequency.exponentialRampToValueAtTime(880, now + 0.18); // A5
+                gain.gain.setValueAtTime(0.25, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
                 osc.start(now);
-                osc.stop(now + 0.3);
+                osc.stop(now + 0.25);
             } else if (type === 'wrong') {
-                osc.type = 'triangle';
-                osc.frequency.setValueAtTime(220, now); // A3
-                osc.frequency.exponentialRampToValueAtTime(110, now + 0.25); // A2
-                gain.gain.setValueAtTime(0.3, now);
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(180, now);
+                osc.frequency.exponentialRampToValueAtTime(90, now + 0.25);
+                gain.gain.setValueAtTime(0.25, now);
                 gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
                 osc.start(now);
                 osc.stop(now + 0.25);
             } else if (type === 'click') {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
                 osc.type = 'sine';
-                osc.frequency.setValueAtTime(400, now);
-                gain.gain.setValueAtTime(0.1, now);
-                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+                osc.frequency.setValueAtTime(450, now);
+                gain.gain.setValueAtTime(0.08, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.04);
                 osc.start(now);
-                osc.stop(now + 0.05);
+                osc.stop(now + 0.04);
             } else if (type === 'finish') {
-                // Arpeggio
                 [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
-                    const osc2 = audioCtx.createOscillator();
-                    const gain2 = audioCtx.createGain();
-                    osc2.connect(gain2);
-                    gain2.connect(audioCtx.destination);
-                    osc2.frequency.value = freq;
-                    gain2.gain.setValueAtTime(0.2, now + idx * 0.1);
-                    gain2.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.1 + 0.3);
-                    osc2.start(now + idx * 0.1);
-                    osc2.stop(now + idx * 0.1 + 0.3);
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0.15, now + idx * 0.08);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.08 + 0.25);
+                    osc.start(now + idx * 0.08);
+                    osc.stop(now + idx * 0.08 + 0.25);
                 });
+            } else if (type === 'combo') {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(600, now);
+                osc.frequency.exponentialRampToValueAtTime(1200, now + 0.15);
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+                osc.start(now);
+                osc.stop(now + 0.2);
             }
         }
     </script>
 
     <!-- GAME LOGIC -->
     <script>
-        // WORD DATABASE (20 Pairs)
+        // EXPANDED WORD DATABASE (50+ Common Misspelled Words)
         const wordDatabase = [
-            { correct: "อนุญาต", wrong: "อนุญาติ", desc: "ไม่มี สระอิ ที่ ต.เต่า (ย้อนจำ: ญาติ มีอิ, อนุญาต ไม่มีอิ)" },
+            { correct: "อนุญาต", wrong: "อนุญาติ", desc: "ไม่มี สระอิ ที่ ต.เต่า (จำว่า: 'ญาติ' มีสระอิ, 'อนุญาต' ไม่มี)" },
             { correct: "สังเกต", wrong: "สังเกตุ", desc: "ไม่มี สระอุ ที่ ต.เต่า" },
             { correct: "กะเพรา", wrong: "กระเพรา", desc: "ใช้ 'กะ' (ไม่มี ร) และ 'เพรา' (มี ร)" },
-            { correct: "ผัดกะเพรา", wrong: "ผัดกระเพรา", desc: "คำว่า กะเพรา ไม่ต้องใส่ ร.เรือ ตรง กะ" },
+            { correct: "ผัดกะเพรา", wrong: "ผัดกระเพรา", desc: "กะเพรา ไม่มี ร.เรือ ตรงคำว่า กะ" },
             { correct: "ลายเซ็น", wrong: "ลายเซ็นต์", desc: "ไม่มี ต.เต่า การันต์" },
-            { correct: "โน้ต", wrong: "โน๊ต", desc: "ใช้ไม้โท ไม่ใช่ไม้ตรี (อักษรต่ำใช้ไม้โทออกเสียงตรี)" },
+            { correct: "โน้ต", wrong: "โน๊ต", desc: "ใช้วรรณยุกต์โท (อักษรต่ำใช้ไม้โทออกเสียงตรี)" },
             { correct: "โควตา", wrong: "โควต้า", desc: "คำยืมภาษาอังกฤษ ไม่ต้องใส่วรรณยุกต์ตรี" },
             { correct: "เว็บไซต์", wrong: "เว็ปไซต์", desc: "ใช้ ส.เสือ และ ป.ปลา สะกด (Website)" },
             { correct: "กราฟิก", wrong: "กราฟฟิก", desc: "ใช้ ฟ.ฟัน ตัวเดียว (Graphic)" },
-            { correct: "คำนวณ", wrong: "คำนวน", desc: "ใช้ ณ.นกเณร สะกด" },
-            { correct: "เกม", wrong: "เกมส์", desc: "คำว่า เกม ในภาษาไทยมาตรฐานไม่ต้องใส่ ส.เสือ การันต์" },
+            { correct: "คำนวณ", wrong: "คำนวน", desc: "ใช้ ณ.เณร สะกด" },
+            { correct: "เกม", wrong: "เกมส์", desc: "ในภาษาไทยมาตรฐานไม่ต้องใส่ ส.เสือ การันต์" },
             { correct: "บล็อก", wrong: "บล็อค", desc: "ใช้ ก.ไก่ สะกด (Block)" },
-            { correct: "เค้ก", wrong: "เค๊ก", desc: "ใช้ไม้โท ไม่ใช้ไม้ตรี" },
+            { correct: "เค้ก", wrong: "เค๊ก", desc: "ใช้วรรณยุกต์โท ไม่ใช้ไม้ตรี" },
             { correct: "คลินิก", wrong: "คลินิค", desc: "ใช้ ก.ไก่ สะกด (Clinic)" },
             { correct: "ผูกพัน", wrong: "ผูกพันธ์", desc: "ไม่มี ธ.ธง การันต์ (พันธ์ ใช้กับ เผ่าพันธุ์)" },
             { correct: "โอกาส", wrong: "โอกาศ", desc: "ใช้ ส.เสือ สะกด" },
-            { correct: "มุกตลก", wrong: "มุขตลก", desc: "มุกตลก ใช้ มุก (ก.ไก่) ส่วน มุข หมายถึง หน้าจั่ว/อาคาร" },
+            { correct: "มุกตลก", wrong: "มุขตลก", desc: "มุกตลก ใช้ มุก (ก.ไก่) / มุข หมายถึง หน้าจั่วอาคาร" },
             { correct: "สัมมนา", wrong: "สัมนา", desc: "มี ม.ม้า 2 ตัว (สัมมนา)" },
             { correct: "กะทัดรัด", wrong: "กระทัดรัด", desc: "ใช้ 'กะ' ไม่มี ร.เรือ" },
-            { correct: "ซีรีส์", wrong: "ซีรี่ย์", desc: "ทับศัพท์ Series ใช้ ร.เรือ สระอี และ ส.เสือ การันต์" }
+            { correct: "ซีรีส์", wrong: "ซีรี่ย์", desc: "ทับศัพท์ Series ใช้ ร.เรือ สระอี และ ส.เสือ การันต์" },
+            { correct: "ศรีษะ", wrong: "ศีรษะ", desc: "ศีรษะ เขียน ส.เสือ ศ.ศาลา ร.เรือ สระอี (ศ-ร-ี)" },
+            { correct: "พิถีพิถัน", wrong: "ประณีตประนอม", desc: "พิถีพิถัน สะกดด้วย ถ.ถุง ทั้งสองคำ" },
+            { correct: "ประณีต", wrong: "ปราณีต", desc: "ประณีต ใช้ ป.ปลา ร.เรือ และ ณ.เณร" },
+            { correct: "อัญชลี", wrong: "อันชลี", desc: "ใช้ ญ.หญิง สะกด" },
+            { correct: "เทคโนโลยี", wrong: "เทคโนโลยี่", desc: "คำว่า 'ยี' ไม่มีไม้เอก" },
+            { correct: "ไอศกรีม", wrong: "ไอศครีม", desc: "ใช้ ก.ไก่ สะกด (Ice cream)" },
+            { correct: "แก๊ง", wrong: "แก๊งค์", desc: "ไม่มี ค.ควาย การันต์" },
+            { correct: "สแกน", wrong: "สแคน", desc: "ใช้ ก.ไก่ สะกด (Scan)" },
+            { correct: "การ์ตูน", wrong: "การ์ตูนต์", desc: "การ์ตูน ไม่มี ต.เต่า การันต์ท้ายคำ" },
+            { correct: "คุกกี้", wrong: "คุ้กกี้", desc: "ใช้ไม้โทที่ ก.ไก่ (คุกกี้)" },
+            { correct: "แท็กซี่", wrong: "แท๊กซี่", desc: "ใช้ไม้ไต่คู้ หรือไม่ใส่วรรณยุกต์ตรี (แท็กซี่)" },
+            { correct: "อินเทอร์เน็ต", wrong: "อินเตอร์เน็ต", desc: "ทับศัพท์ Internet ใช้ ท.ทหาร" },
+            { correct: "เปอร์เซ็นต์", wrong: "เปอร์เซนต์", desc: "มี ต.เต่า ตร์ การันต์ (Percent)" },
+            { correct: "โปรเจกต์", wrong: "โปรเจ็คต์", desc: "ใช้ ก.ไก่ สะกด (Project)" },
+            { correct: "ออฟฟิศ", font: "ออฟฟิต", wrong: "ออฟฟิต", desc: "ใช้ ศ.ศาลา สะกด (Office)" },
+            { correct: "โพสต์", wrong: "โพส", desc: "มี ต.เต่า การันต์ (Post)" },
+            { correct: "กะทิ", wrong: "กระทิ", desc: "ใช้ 'กะ' ไม่มี ร.เรือ" },
+            { correct: "ทะลาย", wrong: "ทลาย", desc: "มะพร้าวเป็น 'ทะลาย' (มี สระอะ) / พังทลาย (ไม่มี สระอะ)" },
+            { correct: "ทะเลาะ", wrong: "ทะเลอะ", desc: "ใช้ สระเอาะ (ทะเลาะ)" },
+            { correct: "ปะรำ", wrong: "ประรำ", desc: "ใช้ 'ปะ' ไม่มี ร.เรือ" },
+            { correct: "ผัดไทย", wrong: "ผัดไท", desc: "ผัดไทย มี ย.ยักษ์ สะกด" },
+            { correct: "แคปซูล", wrong: "แค็ปซูล", desc: "ใช้ ป.ปลา สะกด ไม่ต้องใส่ไม้ไต่คู้" },
+            { correct: "พลาสติก", wrong: "พลาสติ๊ก", desc: "ใช้ ก.ไก่ ไม่มีไม้ตรี" },
+            { correct: "สวิตช์", wrong: "สวิทช์", desc: "ใช้ ต.เต่า สะกด (Switch)" },
+            { correct: "ลอตเตอรี", wrong: "ลอตเตอรี่", desc: "คำทับศัพท์มาตรฐานไม่มีไม้เอก" },
+            { correct: "เสบียง", wrong: "เสบียงค์", desc: "เสบียง ไม่มี ค.ควาย การันต์" },
+            { correct: "เฉยว่อง", wrong: "เฉลียวฉลาด", desc: "ตัวอย่างคำไทยโบราณมักสะกดผิด" },
+            { correct: "อัศจรรย์", wrong: "อัศจรรย์ใจ", desc: "อัศจรรย์ ใช้ รร (เรารวม) ย.ยักษ์ การันต์" },
+            { correct: "อุปทาน", wrong: "อุปทานหมู่", desc: "อุปทาน (Supply) / อุปาทาน (การยึดมั่นถือมั่น)" },
+            { correct: "หลงใหล", wrong: "หลงไหล", desc: "ใช้ สระไอไม้ม้วน (ใหล)" }
         ];
 
         // GAME STATES
@@ -310,15 +440,27 @@
         let currentQuestionIndex = 0;
         let score = 0;
         let correctAnswersCount = 0;
+        let streak = 0;
         let timer = null;
         let timeLeft = 10;
         let totalTimeUsed = 0;
         let isAnswered = false;
+        let sessionAnswersHistory = [];
 
         // ON LOAD
         window.onload = function() {
             renderStartLeaderboard();
         };
+
+        // MASCOT INTERACTION
+        function pokeMascot() {
+            playSound('combo');
+            const svg = document.getElementById('mascot-svg');
+            svg.classList.add('animate__animated', 'animate__rubberBand');
+            setTimeout(() => {
+                svg.classList.remove('animate__animated', 'animate__rubberBand');
+            }, 1000);
+        }
 
         // START GAME
         function startGame(e) {
@@ -330,8 +472,10 @@
             playerName = nameInput;
             score = 0;
             correctAnswersCount = 0;
+            streak = 0;
             totalTimeUsed = 0;
             currentQuestionIndex = 0;
+            sessionAnswersHistory = [];
 
             // Pick 10 random questions from database
             const shuffled = [...wordDatabase].sort(() => 0.5 - Math.random());
@@ -355,10 +499,19 @@
             document.getElementById('current-score').innerText = score;
             document.getElementById('progress-bar').style.width = `${((currentQuestionIndex + 1) / 10) * 100}%`;
 
+            // Streak UI
+            const streakBadge = document.getElementById('streak-badge');
+            if (streak >= 2) {
+                streakBadge.classList.remove('hidden');
+                document.getElementById('streak-count').innerText = streak;
+                document.getElementById('streak-bonus').innerText = streak * 15;
+            } else {
+                streakBadge.classList.add('hidden');
+            }
+
             // Reset feedback box
             const feedbackBox = document.getElementById('feedback-box');
             feedbackBox.classList.add('hidden');
-            feedbackBox.className = "mt-4 p-4 rounded-2xl hidden animate__animated animate__fadeIn";
 
             // Prepare choices (randomize correct & wrong order)
             const isCorrectFirst = Math.random() < 0.5;
@@ -366,17 +519,16 @@
                 ? [{ text: q.correct, isCorrect: true }, { text: q.wrong, isCorrect: false }]
                 : [{ text: q.wrong, isCorrect: false }, { text: q.correct, isCorrect: true }];
 
-            q.choices = choices; // store current setup
+            q.choices = choices;
 
             // Render buttons
             for (let i = 0; i < 2; i++) {
                 const btn = document.getElementById(`btn-opt-${i}`);
-                btn.className = "option-btn py-5 px-4 bg-white hover:bg-purple-50 border-2 border-purple-200 rounded-2xl text-xl font-bold text-gray-800 shadow-sm transition-all btn-bounce flex items-center justify-center gap-2";
+                btn.className = "option-btn py-4 px-4 bg-white hover:bg-purple-50 border-2 border-purple-200 rounded-2xl text-xl font-bold text-gray-800 shadow-sm transition-all btn-bounce flex items-center justify-center gap-2";
                 btn.disabled = false;
                 btn.innerHTML = `<span>${choices[i].text}</span>`;
             }
 
-            // Start Timer (10s per question)
             startTimer();
         }
 
@@ -413,24 +565,29 @@
         function handleTimeout() {
             if (isAnswered) return;
             isAnswered = true;
+            streak = 0; // Reset streak
 
             playSound('wrong');
             const q = currentQuestions[currentQuestionIndex];
+
+            sessionAnswersHistory.push({
+                question: q,
+                userChoice: "หมดเวลา",
+                isCorrect: false
+            });
 
             // Highlight buttons
             for (let i = 0; i < 2; i++) {
                 const btn = document.getElementById(`btn-opt-${i}`);
                 btn.disabled = true;
                 if (q.choices[i].isCorrect) {
-                    btn.className = "option-btn py-5 px-4 bg-emerald-500 text-white border-2 border-emerald-600 rounded-2xl text-xl font-bold shadow-md flex items-center justify-center gap-2";
+                    btn.className = "option-btn py-4 px-4 bg-emerald-500 text-white border-2 border-emerald-600 rounded-2xl text-xl font-bold shadow-md flex items-center justify-center gap-2";
                     btn.innerHTML += ` <i class="fa-solid fa-circle-check"></i>`;
                 }
             }
 
-            // Show feedback timeout
-            showFeedback(false, `หมดเวลา! คำที่ถูกต้องคือ <strong>"${q.correct}"</strong><br><span class="text-xs text-gray-600">${q.desc}</span>`);
-
-            setTimeout(nextQuestion, 1500);
+            showFeedback(false, `⏰ หมดเวลา! คำที่ถูกต้องคือ <strong>"${q.correct}"</strong><br><span class="text-xs text-gray-600">${q.desc}</span>`);
+            setTimeout(nextQuestion, 1600);
         }
 
         // SELECT ANSWER
@@ -443,7 +600,12 @@
             const selected = q.choices[index];
             const isCorrect = selected.isCorrect;
 
-            // Disable both buttons
+            sessionAnswersHistory.push({
+                question: q,
+                userChoice: selected.text,
+                isCorrect: isCorrect
+            });
+
             for (let i = 0; i < 2; i++) {
                 document.getElementById(`btn-opt-${i}`).disabled = true;
             }
@@ -451,33 +613,40 @@
             const chosenBtn = document.getElementById(`btn-opt-${index}`);
 
             if (isCorrect) {
-                playSound('correct');
+                streak++;
                 correctAnswersCount++;
-                // Score calculation: Base 100 pts + bonus time left * 10
-                const pointsGained = 100 + (timeLeft * 10);
+
+                // Score calculation: Base 100 + bonus time + streak bonus
+                const streakBonus = (streak > 1) ? streak * 15 : 0;
+                const pointsGained = 100 + (timeLeft * 10) + streakBonus;
                 score += pointsGained;
 
-                chosenBtn.className = "option-btn py-5 px-4 bg-emerald-500 text-white border-2 border-emerald-600 rounded-2xl text-xl font-bold shadow-md animate__animated animate__rubberBand flex items-center justify-center gap-2";
+                if (streak >= 2) {
+                    playSound('combo');
+                } else {
+                    playSound('correct');
+                }
+
+                chosenBtn.className = "option-btn py-4 px-4 bg-emerald-500 text-white border-2 border-emerald-600 rounded-2xl text-xl font-bold shadow-md animate__animated animate__rubberBand flex items-center justify-center gap-2";
                 chosenBtn.innerHTML += ` <i class="fa-solid fa-circle-check"></i>`;
 
-                showFeedback(true, `ถูกต้อง! (+${pointsGained} คะแนน)<br><span class="text-xs text-emerald-800">${q.desc}</span>`);
+                showFeedback(true, `ถูกต้อง! (+${pointsGained} คะแนน ${streakBonus ? `รวมคอมโบ 🔥` : ''})<br><span class="text-xs text-emerald-800">${q.desc}</span>`);
             } else {
+                streak = 0; // Reset streak
                 playSound('wrong');
-                chosenBtn.className = "option-btn py-5 px-4 bg-rose-500 text-white border-2 border-rose-600 rounded-2xl text-xl font-bold shadow-md animate__animated animate__shakeX flex items-center justify-center gap-2";
+
+                chosenBtn.className = "option-btn py-4 px-4 bg-rose-500 text-white border-2 border-rose-600 rounded-2xl text-xl font-bold shadow-md animate__animated animate__shakeX flex items-center justify-center gap-2";
                 chosenBtn.innerHTML += ` <i class="fa-solid fa-circle-xmark"></i>`;
 
-                // Highlight correct one
                 const correctIdx = q.choices.findIndex(c => c.isCorrect);
                 const correctBtn = document.getElementById(`btn-opt-${correctIdx}`);
-                correctBtn.className = "option-btn py-5 px-4 bg-emerald-100 text-emerald-800 border-2 border-emerald-400 rounded-2xl text-xl font-bold shadow-sm flex items-center justify-center gap-2";
+                correctBtn.className = "option-btn py-4 px-4 bg-emerald-100 text-emerald-800 border-2 border-emerald-400 rounded-2xl text-xl font-bold shadow-sm flex items-center justify-center gap-2";
 
-                showFeedback(false, `ผิดเลย! คำที่ถูกคือ <strong>"${q.correct}"</strong><br><span class="text-xs text-rose-800">${q.desc}</span>`);
+                showFeedback(false, `ยังไม่ถูกต้อง! คำที่ถูกคือ <strong>"${q.correct}"</strong><br><span class="text-xs text-rose-800">${q.desc}</span>`);
             }
 
             document.getElementById('current-score').innerText = score;
-
-            // Wait 1.2s then go next
-            setTimeout(nextQuestion, 1200);
+            setTimeout(nextQuestion, 1400);
         }
 
         // FEEDBACK DISPLAY
@@ -489,17 +658,17 @@
             feedbackBox.classList.remove('hidden');
 
             if (isSuccess) {
-                feedbackBox.className = "mt-4 p-4 rounded-2xl bg-emerald-100 border border-emerald-300 text-emerald-900 animate__animated animate__fadeIn";
-                feedbackTitle.innerHTML = `<i class="fa-solid fa-face-smile text-emerald-600 text-xl"></i> เก่งมาก!`;
+                feedbackBox.className = "mt-4 p-3.5 rounded-2xl bg-emerald-100 border border-emerald-300 text-emerald-900 animate__animated animate__fadeIn";
+                feedbackTitle.innerHTML = `<i class="fa-solid fa-face-smile-beam text-emerald-600 text-xl"></i> เก่งมาก!`;
             } else {
-                feedbackBox.className = "mt-4 p-4 rounded-2xl bg-rose-100 border border-rose-300 text-rose-900 animate__animated animate__fadeIn";
-                feedbackTitle.innerHTML = `<i class="fa-solid fa-face-sad-tear text-rose-600 text-xl"></i> ยังไม่ใช่...`;
+                feedbackBox.className = "mt-4 p-3.5 rounded-2xl bg-rose-100 border border-rose-300 text-rose-900 animate__animated animate__fadeIn";
+                feedbackTitle.innerHTML = `<i class="fa-solid fa-face-sad-tear text-rose-600 text-xl"></i> คำตอบที่ถูกคือ...`;
             }
 
             feedbackDesc.innerHTML = htmlContent;
         }
 
-        // NEXT QUESTION OR FINISH
+        // NEXT QUESTION
         function nextQuestion() {
             currentQuestionIndex++;
             if (currentQuestionIndex < 10) {
@@ -509,59 +678,54 @@
             }
         }
 
-        // END GAME & SHOW RESULT
+        // END GAME
         function endGame() {
             clearInterval(timer);
             playSound('finish');
 
-            // Save to Leaderboard
             saveScore(playerName, score, totalTimeUsed, correctAnswersCount);
 
-            // Hide game, show result
             document.getElementById('game-screen').classList.add('hidden');
             document.getElementById('result-screen').classList.remove('hidden');
 
-            // Trigger Confetti
             if (correctAnswersCount >= 6) {
                 confetti({
-                    particleCount: 100,
-                    spread: 70,
+                    particleCount: 120,
+                    spread: 80,
                     origin: { y: 0.6 }
                 });
             }
 
-            // Fill Result UI
             document.getElementById('result-player-name').innerText = `ผู้เล่น: คุณ ${playerName}`;
             document.getElementById('res-correct-count').innerText = `${correctAnswersCount}/10`;
             document.getElementById('res-total-score').innerText = score;
             document.getElementById('res-time-used').innerText = `${totalTimeUsed}s`;
 
-            // Grade feedback
             const badge = document.getElementById('result-badge');
             const iconContainer = document.getElementById('result-icon-container');
 
             if (correctAnswersCount === 10) {
                 badge.innerText = "🏆 ภาษาไทยระดับเซียน!";
-                iconContainer.className = "inline-block p-4 bg-yellow-100 rounded-full mb-3 text-yellow-500 text-5xl";
+                iconContainer.className = "inline-block p-4 bg-amber-100 rounded-full mb-2 text-amber-500 text-5xl";
                 iconContainer.innerHTML = `<i class="fa-solid fa-crown animate__animated animate__tada"></i>`;
             } else if (correctAnswersCount >= 7) {
                 badge.innerText = "🌟 แม่นยำสุดๆ!";
-                iconContainer.className = "inline-block p-4 bg-purple-100 rounded-full mb-3 text-purple-600 text-5xl";
+                iconContainer.className = "inline-block p-4 bg-purple-100 rounded-full mb-2 text-purple-600 text-5xl";
                 iconContainer.innerHTML = `<i class="fa-solid fa-star animate__animated animate__bounce"></i>`;
             } else if (correctAnswersCount >= 5) {
                 badge.innerText = "👍 ทำได้ดี ใช้ได้เลย!";
-                iconContainer.className = "inline-block p-4 bg-blue-100 rounded-full mb-3 text-blue-500 text-5xl";
+                iconContainer.className = "inline-block p-4 bg-blue-100 rounded-full mb-2 text-blue-500 text-5xl";
                 iconContainer.innerHTML = `<i class="fa-solid fa-thumbs-up"></i>`;
             } else {
                 badge.innerText = "✌️ พยายามอีกนิดนะ!";
-                iconContainer.className = "inline-block p-4 bg-pink-100 rounded-full mb-3 text-pink-500 text-5xl";
+                iconContainer.className = "inline-block p-4 bg-pink-100 rounded-full mb-2 text-pink-500 text-5xl";
                 iconContainer.innerHTML = `<i class="fa-solid fa-heart"></i>`;
             }
 
             renderResultLeaderboard();
         }
 
-        // RESET TO START (MUST RE-ENTER NAME)
+        // RESET GAME
         function resetGameToStart() {
             playSound('click');
             document.getElementById('player-name').value = '';
@@ -570,9 +734,62 @@
             renderStartLeaderboard();
         }
 
-        // LOCALSTORAGE LEADERBOARD LOGIC
+        // REVIEW MODAL
+        function toggleReviewModal() {
+            playSound('click');
+            const modal = document.getElementById('review-modal');
+            const isHidden = modal.classList.contains('hidden');
+
+            if (isHidden) {
+                renderReviewList();
+                modal.classList.remove('hidden');
+            } else {
+                modal.classList.add('hidden');
+            }
+        }
+
+        function renderReviewList() {
+            const container = document.getElementById('review-list');
+            let html = '';
+
+            sessionAnswersHistory.forEach((item, index) => {
+                const q = item.question;
+                const statusColor = item.isCorrect ? "text-emerald-600 bg-emerald-50 border-emerald-200" : "text-rose-600 bg-rose-50 border-rose-200";
+                const statusIcon = item.isCorrect ? '<i class="fa-solid fa-circle-check"></i>' : '<i class="fa-solid fa-circle-xmark"></i>';
+
+                html += `
+                    <div class="p-3 rounded-2xl border ${statusColor} text-xs sm:text-sm">
+                        <div class="flex justify-between items-center mb-1 font-bold">
+                            <span>ข้อที่ ${index + 1}: ${q.correct}</span>
+                            <span>${statusIcon} ${item.isCorrect ? 'ตอบถูก' : 'ตอบผิด'}</span>
+                        </div>
+                        <p class="text-gray-700"><strong>คำที่ถูกต้อง:</strong> <span class="text-emerald-700 font-bold">${q.correct}</span> (ผิดบ่อย: <span class="line-through text-rose-500">${q.wrong}</span>)</p>
+                        <p class="text-gray-500 text-xs mt-1"><i class="fa-solid fa-lightbulb text-amber-500"></i> ${q.desc}</p>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // SHARE SCORE
+        function shareScore() {
+            playSound('click');
+            const textToCopy = `🇹🇭 ฉันได้คะแนน ${score} คะแนน (ตอบถูก ${correctAnswersCount}/10 ข้อ) ในเกม "คนไทยNative"! มาลองทดสอบภาษาไทยกันเลย!`;
+            
+            const tempInput = document.createElement("textarea");
+            tempInput.value = textToCopy;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+
+            alert("คัดลอกข้อความชวนเพื่อนแล้ว! นำไปโพสต์ หรือส่งต่อได้เลย 🚀");
+        }
+
+        // LEADERBOARD LOGIC
         function getLeaderboard() {
-            const data = localStorage.getItem('thai_word_game_scores');
+            const data = localStorage.getItem('thai_word_game_scores_v2');
             return data ? JSON.parse(data) : [];
         }
 
@@ -586,20 +803,18 @@
                 date: new Date().toLocaleDateString('th-TH')
             });
 
-            // Sort by Score DESC, then Time ASC
             leaderboard.sort((a, b) => {
                 if (b.score !== a.score) return b.score - a.score;
                 return a.time - b.time;
             });
 
-            // Keep top 20
-            const topScores = leaderboard.slice(0, 20);
-            localStorage.setItem('thai_word_game_scores', JSON.stringify(topScores));
+            const topScores = leaderboard.slice(0, 15);
+            localStorage.setItem('thai_word_game_scores_v2', JSON.stringify(topScores));
         }
 
         function clearLeaderboard() {
-            if (confirm("คุณต้องการล้างสถิติตารางคะแนนทั้งหมดใช่หรือไม่?")) {
-                localStorage.removeItem('thai_word_game_scores');
+            if (confirm("ต้องการล้างสถิติตารางคะแนนทั้งหมดใช่หรือไม่?")) {
+                localStorage.removeItem('thai_word_game_scores_v2');
                 renderStartLeaderboard();
             }
         }
@@ -609,26 +824,26 @@
             const container = document.getElementById('start-leaderboard');
 
             if (leaderboard.length === 0) {
-                container.innerHTML = `<p class="text-center text-gray-400 py-2">ยังไม่มีสถิติ เป็นคนแรกที่เล่นเลย!</p>`;
+                container.innerHTML = `<p class="text-center text-gray-400 py-2 text-xs">ยังไม่มีสถิติ มาเปิดคนแรกเลย!</p>`;
                 return;
             }
 
             let html = '';
             leaderboard.slice(0, 5).forEach((item, index) => {
-                let badgeColor = "text-gray-500";
-                if (index === 0) badgeColor = "text-yellow-500 font-bold";
-                if (index === 1) badgeColor = "text-gray-400 font-bold";
-                if (index === 2) badgeColor = "text-amber-600 font-bold";
+                let badgeColor = "text-gray-400";
+                if (index === 0) badgeColor = "text-amber-500 font-bold";
+                if (index === 1) badgeColor = "text-slate-400 font-bold";
+                if (index === 2) badgeColor = "text-amber-700 font-bold";
 
                 html += `
-                    <div class="flex items-center justify-between py-1.5 px-3 bg-white/60 rounded-xl">
+                    <div class="flex items-center justify-between py-1 px-2.5 bg-white/70 rounded-xl text-xs">
                         <div class="flex items-center gap-2">
-                            <span class="${badgeColor} w-5 text-center">#${index + 1}</span>
-                            <span class="font-medium text-gray-800">${escapeHtml(item.name)}</span>
+                            <span class="${badgeColor} w-4 text-center">#${index + 1}</span>
+                            <span class="font-semibold text-gray-800">${escapeHtml(item.name)}</span>
                         </div>
                         <div class="text-right">
                             <span class="font-bold text-purple-600">${item.score} pt</span>
-                            <span class="text-xs text-gray-400 ml-1">(${item.time}s)</span>
+                            <span class="text-[10px] text-gray-400 ml-1">(${item.time}s)</span>
                         </div>
                     </div>
                 `;
@@ -642,7 +857,7 @@
             const tbody = document.getElementById('leaderboard-body');
 
             if (leaderboard.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" class="text-center py-3 text-gray-400">ไม่มีข้อมูล</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="4" class="text-center py-2 text-gray-400">ไม่มีข้อมูล</td></tr>`;
                 return;
             }
 
@@ -653,12 +868,12 @@
 
                 html += `
                     <tr class="${highlightClass}">
-                        <td class="py-2 px-1">
+                        <td class="py-1.5 px-1">
                             ${index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : index + 1}
                         </td>
-                        <td class="py-2 px-1 truncate max-w-[100px]">${escapeHtml(item.name)}</td>
-                        <td class="py-2 px-1 text-center text-purple-600 font-semibold">${item.score}</td>
-                        <td class="py-2 px-1 text-right text-gray-500">${item.time}s</td>
+                        <td class="py-1.5 px-1 truncate max-w-[110px]">${escapeHtml(item.name)}</td>
+                        <td class="py-1.5 px-1 text-center text-purple-600 font-bold">${item.score}</td>
+                        <td class="py-1.5 px-1 text-right text-gray-500">${item.time}s</td>
                     </tr>
                 `;
             });
