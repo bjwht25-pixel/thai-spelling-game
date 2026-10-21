@@ -1,1 +1,174 @@
 
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 20px;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Tahoma, sans-serif;
+  background: #fff7ed;
+  color: #352d45;
+}
+
+.card {
+  background: white;
+  width: 100%;
+  max-width: 540px;
+  padding: 28px;
+  border-radius: 24px;
+  box-shadow: 0 10px 35px #5b46351a;
+}
+
+.home {
+  text-align: center;
+}
+
+.logo {
+  font-size: 52px;
+}
+
+h1 {
+  color: #805ad5;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  color: #777;
+  line-height: 1.7;
+}
+
+.info {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.info span {
+  background: #f3e8ff;
+  padding: 10px;
+  border-radius: 12px;
+  font-weight: bold;
+}
+
+.progress {
+  height: 8px;
+  background: #eee;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+#bar {
+  height: 100%;
+  width: 0;
+  background: #a78bfa;
+  transition: width .3s;
+}
+
+#question {
+  margin: 25px 0;
+  text-align: center;
+}
+
+.options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+button, .btn {
+  font: inherit;
+  border: 0;
+  border-radius: 13px;
+  padding: 14px;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+}
+
+.btn {
+  display: block;
+  width: 100%;
+  margin-top: 14px;
+  background: #805ad5;
+  color: white;
+  font-weight: bold;
+}
+
+.btn:hover {
+  background: #6b46c1;
+}
+
+.secondary {
+  background: #eee7fa;
+  color: #5b4290;
+}
+
+.option {
+  background: #f5f3ff;
+  border: 2px solid transparent;
+  color: #44335d;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.option:hover:not(:disabled) {
+  border-color: #a78bfa;
+}
+
+.option:disabled {
+  cursor: default;
+  opacity: 1;
+}
+
+.correct {
+  background: #dcfce7;
+  border-color: #22c55e;
+}
+
+.wrong {
+  background: #fee2e2;
+  border-color: #ef4444;
+}
+
+#feedback {
+  min-height: 65px;
+  margin: 18px 0;
+  line-height: 1.7;
+}
+
+.back {
+  color: #805ad5;
+  text-decoration: none;
+}
+
+.small {
+  font-size: 13px;
+  color: #888;
+  margin-top: 22px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+@media (max-width: 400px) {
+  .card {
+    padding: 20px;
+  }
+
+  .options {
+    gap: 8px;
+  }
+
+  .option {
+    padding: 12px 5px;
+    font-size: 14px;
+  }
+}
+
