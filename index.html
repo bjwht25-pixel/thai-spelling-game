@@ -197,7 +197,6 @@
 
             <!-- Question Area -->
             <div class="text-center my-3">
-                <p class="text-xs font-bold text-purple-600 uppercase tracking-widest mb-1">สะกดถูกต้องตามพจนานุกรม</p>
                 <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-800 font-prompt">คำไหนเขียนถูกต้อง?</h2>
             </div>
 
@@ -249,7 +248,7 @@
                     <i class="fa-solid fa-book-open"></i> ดูเฉลยละเอียด
                 </button>
                 <button onclick="shareScore()" class="py-2.5 px-3 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-bold text-xs sm:text-sm rounded-xl transition-all flex items-center justify-center gap-1.5">
-                    <i class="fa-solid fa-share-nodes"></i> แชร์ท้าเพื่อน
+                    <i class="fa-solid fa-share-nodes"></i> แชร์เลย
                 </button>
             </div>
 
@@ -705,19 +704,19 @@
             const iconContainer = document.getElementById('result-icon-container');
 
             if (correctAnswersCount === 10) {
-                badge.innerText = "🏆 ภาษาไทยระดับเซียน!";
+                badge.innerText = "คนไทยNative!";
                 iconContainer.className = "inline-block p-4 bg-amber-100 rounded-full mb-2 text-amber-500 text-5xl";
                 iconContainer.innerHTML = `<i class="fa-solid fa-crown animate__animated animate__tada"></i>`;
             } else if (correctAnswersCount >= 7) {
-                badge.innerText = "🌟 แม่นยำสุดๆ!";
+                badge.innerText = "คนไทยเกือบNative!";
                 iconContainer.className = "inline-block p-4 bg-purple-100 rounded-full mb-2 text-purple-600 text-5xl";
                 iconContainer.innerHTML = `<i class="fa-solid fa-star animate__animated animate__bounce"></i>`;
             } else if (correctAnswersCount >= 5) {
-                badge.innerText = "👍 ทำได้ดี ใช้ได้เลย!";
+                badge.innerText = "ใช้ได้!";
                 iconContainer.className = "inline-block p-4 bg-blue-100 rounded-full mb-2 text-blue-500 text-5xl";
                 iconContainer.innerHTML = `<i class="fa-solid fa-thumbs-up"></i>`;
             } else {
-                badge.innerText = "✌️ พยายามอีกนิดนะ!";
+                badge.innerText = "คนไทยจริงหรือ!";
                 iconContainer.className = "inline-block p-4 bg-pink-100 rounded-full mb-2 text-pink-500 text-5xl";
                 iconContainer.innerHTML = `<i class="fa-solid fa-heart"></i>`;
             }
