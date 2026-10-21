@@ -4,7 +4,37 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>ทายคำเขียนผิด</title>
-<link rel="stylesheet" href="css/style.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:"Sarabun","Noto Sans Thai",system-ui,sans-serif;color:#2b2350;
+background:linear-gradient(135deg,#ff9a9e,#fad0c4 30%,#a1c4fd 65%,#c2ffd8);display:flex;justify-content:center;padding:16px}
+#app{width:100%;max-width:520px}
+.card{background:#fff;border-radius:24px;padding:24px;box-shadow:0 10px 30px rgba(80,40,160,.25);margin-top:12px;text-align:center}
+h1{margin:0 0 4px;font-size:2rem;background:linear-gradient(90deg,#ff4d8d,#ff9f1c,#2ec4b6,#6c5ce7);-webkit-background-clip:text;background-clip:text;color:transparent}
+h2{margin:0 0 12px}
+p{margin:6px 0}
+input{width:100%;padding:14px;border:3px solid #a29bfe;border-radius:14px;font-size:1.1rem;font-family:inherit;text-align:center;margin:12px 0}
+button{font-family:inherit;font-size:1.2rem;font-weight:700;border:0;border-radius:16px;padding:14px 20px;cursor:pointer;color:#fff;transition:transform .1s}
+button:active{transform:scale(.96)}
+.big{width:100%;margin-top:10px}
+.pink{background:linear-gradient(90deg,#ff4d8d,#ff7a59)}
+.teal{background:linear-gradient(90deg,#2ec4b6,#4cc9f0)}
+.purple{background:linear-gradient(90deg,#6c5ce7,#a29bfe)}
+.hud{display:flex;justify-content:space-between;font-weight:700;font-size:1.1rem}
+.bar{height:16px;background:#eee;border-radius:10px;overflow:hidden;margin:10px 0 18px}
+#fill{height:100%;width:100%;background:linear-gradient(90deg,#2ec4b6,#ffd23f,#ff4d8d)}
+.choice{display:block;width:100%;font-size:1.8rem;padding:22px;margin:12px 0}
+.c0{background:linear-gradient(90deg,#ff6b6b,#feca57)}
+.c1{background:linear-gradient(90deg,#48dbfb,#1dd1a1)}
+.fb{background:#ffe3e3;border:3px solid #ff6b6b;border-radius:16px;padding:14px;margin-top:12px;font-size:1.05rem}
+table{width:100%;border-collapse:collapse;margin-top:8px}
+td,th{padding:8px 6px;border-bottom:1px solid #eee}
+th{color:#6c5ce7}
+.wrong{text-align:left;background:#fff5e6;border-left:6px solid #ff9f1c;border-radius:10px;padding:8px 12px;margin:8px 0}
+.big-score{font-size:3rem;font-weight:800;color:#ff4d8d}
+.hide{display:none}
+small{color:#777}
+</style>
 </head>
 <body>
 <div id="app">
@@ -49,8 +79,170 @@
 
 </div>
 
-<script src="js/words.js"></script>
-<script src="js/datastructures.js"></script>
-<script src="js/game.js"></script>
+<script>
+/* ===== 1) HASH: Map เก็บคลังคำ  key = คำที่ถูก, value = {wrong, note} ===== */
+const WORDS = new Map([
+ ["สังเกต",{wrong:"สังเกตุ",note:"สังเกต ไม่มีสระอุ ท้ายคำ"}],
+ ["อนุญาต",{wrong:"อนุญาติ",note:"อนุญาต สะกดด้วย ต ไม่มีสระอิ"}],
+ ["ฉะนั้น",{wrong:"ฉนั้น",note:"ฉะนั้น ต้องมีวรรณยุกต์ ะ"}],
+ ["ผัดไทย",{wrong:"ผัดไท",note:"ผัดไทย ใช้ ย ท้ายคำ"}],
+ ["กะทันหัน",{wrong:"กระทันหัน",note:"กะทันหัน ใช้ กะ ไม่ใช่ กระ"}],
+ ["ลายเซ็น",{wrong:"ลายเซ็นต์",note:"ลายเซ็น ไม่มี ต์"}],
+ ["ประณีต",{wrong:"ปราณีต",note:"ประณีต ไม่มีสระอา"}],
+ ["เทคนิค",{wrong:"เทคนิก",note:"เทคนิค ใช้ ค ท้ายคำ"}],
+ ["ไอศกรีม",{wrong:"ไอศครีม",note:"ไอศกรีม ใช้ กร ไม่ใช่ คร"}],
+ ["สันนิษฐาน",{wrong:"สันนิฐาน",note:"สันนิษฐาน มี ษ"}],
+ ["เอเชีย",{wrong:"เอเซีย",note:"เอเชีย ใช้ ช ช้าง"}],
+ ["คริสต์มาส",{wrong:"คริสมาส",note:"คริสต์มาส ต้องมี ต์"}],
+ ["ผลลัพธ์",{wrong:"ผลลัพท์",note:"ผลลัพธ์ ใช้ ธ ธง"}],
+ ["โอกาส",{wrong:"โอกาศ",note:"โอกาส ใช้ ส เสือ"}],
+ ["ปรากฏ",{wrong:"ปรากฎ",note:"ปรากฏ ใช้ ฏ ปฏัก"}],
+ ["สะดวก",{wrong:"สดวก",note:"สะดวก ต้องมี ะ"}],
+ ["ขมีขมัน",{wrong:"ขะมีขะมัน",note:"ขมีขมัน ไม่มี ะ"}],
+ ["สัมภาษณ์",{wrong:"สัมภาษ",note:"สัมภาษณ์ ต้องมี ณ์ ท้ายคำ"}],
+ ["เฟซบุ๊ก",{wrong:"เฟสบุ๊ค",note:"เฟซบุ๊ก ตามหลักราชบัณฑิต"}],
+ ["ลิปสติก",{wrong:"ลิปสติค",note:"ลิปสติก ใช้ ก ท้ายคำ"}],
+ ["กรกฎาคม",{wrong:"กรกฏาคม",note:"กรกฎาคม ใช้ ฎ ชฎา"}],
+ ["สถานการณ์",{wrong:"สถานะการณ์",note:"สถานการณ์ ไม่มี ะ"}],
+ ["รสชาติ",{wrong:"รสชาด",note:"รสชาติ ใช้ ติ"}],
+ ["นะคะ",{wrong:"นะค่ะ",note:"นะคะ ไม่ใช้ไม้เอก"}],
+ ["โน้ตบุ๊ก",{wrong:"โน๊ตบุ๊ค",note:"โน้ตบุ๊ก ใช้ไม้โท และ ก"}],
+ ["อัตโนมัติ",{wrong:"อัตโนมัต",note:"อัตโนมัติ มีสระอิ ท้ายคำ"}]
+]);
+
+/* ===== 2) LINKED LIST + 3) QUEUE: คิวข้อสอบ สร้างจาก Linked List ===== */
+class ListNode{constructor(v){this.v=v;this.next=null}}
+class LinkedQueue{
+  constructor(){this.head=null;this.tail=null;this.size=0}
+  enqueue(v){const n=new ListNode(v);if(this.tail)this.tail.next=n;else this.head=n;this.tail=n;this.size++}
+  dequeue(){if(!this.head)return null;const v=this.head.v;this.head=this.head.next;if(!this.head)this.tail=null;this.size--;return v}
+}
+
+/* ===== 4) STACK: เก็บคำที่ตอบผิด แล้ว pop มาแสดง (ล่าสุดก่อน) ===== */
+class Stack{
+  constructor(){this.a=[]}
+  push(v){this.a.push(v)}
+  pop(){return this.a.pop()}
+  isEmpty(){return this.a.length===0}
+}
+
+/* ===== 5) RECURSION + 6) DIVIDE & CONQUER + 7) SORTING: Merge Sort ===== */
+function mergeSort(arr,better){
+  if(arr.length<=1)return arr;                 // base case
+  const mid=arr.length>>1;
+  const L=mergeSort(arr.slice(0,mid),better);   // Divide
+  const R=mergeSort(arr.slice(mid),better);
+  const out=[];let i=0,j=0;                     // Conquer (merge)
+  while(i<L.length&&j<R.length)out.push(better(R[j],L[i])?R[j++]:L[i++]);
+  while(i<L.length)out.push(L[i++]);
+  while(j<R.length)out.push(R[j++]);
+  return out;
+}
+
+/* ===== 8) BST + 9) TRAVERSAL: จัดอันดับ Leaderboard ===== */
+const better=(a,b)=>a.score>b.score||(a.score===b.score&&a.time<b.time);
+function bstInsert(node,e){
+  if(!node)return{e,l:null,r:null};
+  if(better(e,node.e))node.r=bstInsert(node.r,e);  // คะแนนดีกว่าไปขวา
+  else node.l=bstInsert(node.l,e);
+  return node;
+}
+function reverseInorder(n,out,limit){            // ขวา -> ราก -> ซ้าย = ดีสุดไปน้อยสุด
+  if(!n||out.length>=limit)return;
+  reverseInorder(n.r,out,limit);
+  if(out.length<limit)out.push(n.e);
+  reverseInorder(n.l,out,limit);
+}
+
+/* ===== ตัวช่วย ===== */
+const $=id=>document.getElementById(id);
+const load=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}};
+const save=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+function show(id){["s-start","s-game","s-result","s-board"].forEach(s=>$(s).classList.toggle("hide",s!==id))}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* ===== ตัวเกม ===== */
+const TOTAL=10,LIMIT=10;
+let queue,wrongStack,score,correct,qn,player,cur,t0,timer,locked,gameStart;
+
+function startGame(){
+  player=$("name").value.trim();
+  if(!player){show("s-start");$("name").focus();$("name").placeholder="กรุณาใส่ชื่อก่อนนะ";return}
+  queue=new LinkedQueue();wrongStack=new Stack();
+  shuffle([...WORDS.keys()]).slice(0,TOTAL).forEach(w=>queue.enqueue(w));
+  score=0;correct=0;qn=0;gameStart=Date.now();
+  show("s-game");nextQ();
+}
+
+function nextQ(){
+  const w=queue.dequeue();
+  if(w===null)return finish();
+  qn++;cur=w;locked=false;
+  $("fb").classList.add("hide");
+  $("qno").textContent="ข้อ "+qn+"/"+TOTAL;
+  $("score").textContent="⭐ "+score;
+  const opts=shuffle([w,WORDS.get(w).wrong]);
+  [0,1].forEach(i=>{const b=$("b"+i);b.textContent=opts[i];b.onclick=()=>answer(opts[i])});
+  t0=Date.now();clearInterval(timer);
+  timer=setInterval(tick,50);tick();
+}
+
+function tick(){
+  const left=Math.max(0,LIMIT-(Date.now()-t0)/1000);
+  $("fill").style.width=(left/LIMIT*100)+"%";
+  $("tleft").textContent="⏱ "+left.toFixed(1);
+  if(left<=0)answer(null);
+}
+
+function answer(choice){
+  if(locked)return;locked=true;clearInterval(timer);
+  const left=Math.max(0,LIMIT-(Date.now()-t0)/1000);
+  if(choice===cur){                              // ถูก -> ไปข้อถัดไปทันที
+    score+=100+Math.round(left*10);correct++;    // 100 + โบนัสเวลา (สูงสุด 100)
+    nextQ();
+  }else{                                         // ผิด/หมดเวลา -> โชว์เฉลยสั้นๆ
+    wrongStack.push(cur);
+    const m=load("wg_miss",{});m[cur]=(m[cur]||0)+1;save("wg_miss",m);
+    const fb=$("fb");
+    fb.innerHTML=(choice===null?"⏰ หมดเวลา! ":"❌ ผิด! ")+"คำที่ถูกคือ <b>"+esc(cur)+"</b><br><small>"+esc(WORDS.get(cur).note)+"</small>";
+    fb.classList.remove("hide");
+    setTimeout(nextQ,1800);
+  }
+}
+
+function finish(){
+  const time=Math.round((Date.now()-gameStart)/1000);
+  const lb=load("wg_lb",[]);
+  lb.push({name:player,score,time});save("wg_lb",lb);
+  $("rname").textContent="ผู้เล่น: "+player;
+  $("rscore").textContent=score+" คะแนน";
+  $("rinfo").textContent="ถูก "+correct+"/"+TOTAL+" ข้อ · ใช้เวลา "+time+" วินาที";
+  let html="";
+  while(!wrongStack.isEmpty()){                  // pop ออกมาทีละคำ
+    const w=wrongStack.pop(),d=WORDS.get(w);
+    html+='<div class="wrong"><s>'+esc(d.wrong)+'</s> → <b>'+esc(w)+'</b><br><small>'+esc(d.note)+'</small></div>';
+  }
+  $("rwrong").innerHTML=html||"<p>🎊 ถูกหมดทุกข้อ เก่งมาก!</p>";
+  show("s-result");
+}
+
+function showBoard(){
+  let root=null;
+  load("wg_lb",[]).forEach(e=>root=bstInsert(root,e)); // สร้าง BST
+  const top=[];reverseInorder(root,top,10);            // traversal ได้ Top 10
+  const medal=["🥇","🥈","🥉"];
+  $("lb").innerHTML="<tr><th>#</th><th>ชื่อ</th><th>คะแนน</th><th>เวลา</th></tr>"+
+    (top.map((e,i)=>"<tr><td>"+(medal[i]||i+1)+"</td><td>"+esc(e.name)+"</td><td>"+e.score+"</td><td>"+e.time+" วิ</td></tr>").join("")
+    ||'<tr><td colspan="4">ยังไม่มีคะแนน มาเป็นคนแรกกัน!</td></tr>');
+  const m=load("wg_miss",{});
+  const arr=Object.keys(m).map(w=>({w,n:m[w]}));
+  const sorted=mergeSort(arr,(a,b)=>a.n>b.n).slice(0,5);  // เรียงด้วย Merge Sort
+  $("miss").innerHTML="<tr><th>คำ</th><th>พลาดกี่ครั้ง</th></tr>"+
+    (sorted.map(x=>"<tr><td>"+esc(x.w)+"</td><td>"+x.n+"</td></tr>").join("")
+    ||'<tr><td colspan="2">ยังไม่มีข้อมูล</td></tr>');
+  show("s-board");
+}
+</script>
 </body>
 </html>
