@@ -1,26 +1,16 @@
-
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ผลคะแนน | เขียนให้ถูก!</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="result.js" defer></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Pridi:wght@500;700&family=Sarabun:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<title>สรุปผล | ปากกาแดง</title>
 </head>
 <body>
-  <main class="card home">
-    <div id="emoji" class="logo">🏆</div>
-    <h1>จบเกมแล้ว!</h1>
-    <p class="subtitle">ผลการทดสอบภาษาไทยของคุณ</p>
-
-    <h2 id="finalScore">0/100 คะแนน</h2>
-    <p id="correctCount">ตอบถูก 0 จาก 10 ข้อ</p>
-    <p id="message"></p>
-
-    <a href="game.html" class="btn">🔄 เล่นอีกครั้ง</a>
-    <a href="index.html" class="btn secondary">🏠 กลับหน้าแรก</a>
-  </main>
+<main id="app"></main>
+<script src="questions.js"></script>
+<script src="result.js"></script>
 </body>
 </html>
-
