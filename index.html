@@ -1,25 +1,44 @@
-
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>เขียนให้ถูก! | เกมทายคำไทย</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Pridi:wght@500;700&family=Sarabun:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<title>ปากกาแดง: เกมจับผิดคำเขียนผิด</title>
 </head>
 <body>
-  <main class="card home">
-    <div class="logo">📚✨</div>
-    <h1>เขียนให้ถูก!</h1>
-    <p class="subtitle">เกมทายคำที่มักเขียนผิด</p>
-
-    <p>มาทดสอบความรู้ภาษาไทยกัน!</p>
-    <p>🎯 10 คำถาม · ข้อละ 10 คะแนน</p>
-    <p>💡 มีเฉลยพร้อมคำอธิบาย</p>
-
-    <a href="game.html" class="btn">เริ่มเล่นเกม 🚀</a>
-    <p class="small">สนุกกับการเรียนรู้ภาษาไทยไปด้วยกัน</p>
-  </main>
+<main>
+  <section class="hero">
+    <div class="mark"><span class="r">สังเกต</span><span class="w">สังเกตุ</span></div>
+    <h1 style="font-size:1.6rem">ปากกาแดง</h1>
+    <p class="sub">เกมจับผิดคำที่คนมักเขียนผิด รอบละ 10 คำ</p>
+  </section>
+  <div class="panel">
+    <h2>เลือกโหมดเล่น</h2>
+    <div class="row">
+      <a class="btn primary" href="game.html?mode=choose">เลือกคำที่เขียนถูก</a>
+      <a class="btn primary" href="game.html?mode=type">พิมพ์คำจากคำใบ้</a>
+    </div>
+    <div id="review" style="margin-top:12px"></div>
+  </div>
+  <div class="panel"><h2>อันดับคะแนน</h2><div id="board"></div></div>
+  <div class="panel" id="hardBox" hidden><h2>คำที่คนพลาดบ่อยที่สุด</h2><div id="hard"></div></div>
+</main>
+<script src="questions.js"></script>
+<script>
+/* เมนู: แสดงอันดับ (Merge Sort) และคำที่พลาดบ่อย */
+const board=mergeSort(load("pdw-board",[]),(a,b)=>b.s-a.s).slice(0,5);
+document.getElementById("board").innerHTML=board.length
+  ?"<ol>"+board.map(e=>"<li>"+esc(e.n)+" <b>"+e.s+"</b> <span class='mute'>("+esc(e.d)+")</span></li>").join("")+"</ol>"
+  :"<p class='mute'>ยังไม่มีคะแนน เล่นรอบแรกเลย</p>";
+const hard=topMissed(5);
+if(hard.length){
+  document.getElementById("review").innerHTML="<a class='btn' href='game.html?mode=review&src=stats'>ทบทวนคำที่เคยพลาด ("+hard.length+" คำ)</a>";
+  document.getElementById("hardBox").hidden=false;
+  document.getElementById("hard").innerHTML="<ul>"+hard.map(([w,n])=>"<li class='good'>"+esc(w)+" <span class='mute'>พลาด "+n+" ครั้ง</span></li>").join("")+"</ul>";
+}
+</script>
 </body>
 </html>
-
