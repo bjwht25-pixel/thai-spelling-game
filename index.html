@@ -2,43 +2,55 @@
 <html lang="th">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Pridi:wght@500;700&family=Sarabun:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-<title>ปากกาแดง: เกมจับผิดคำเขียนผิด</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ทายคำเขียนผิด</title>
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<main>
-  <section class="hero">
-    <div class="mark"><span class="r">สังเกต</span><span class="w">สังเกตุ</span></div>
-    <h1 style="font-size:1.6rem">ปากกาแดง</h1>
-    <p class="sub">เกมจับผิดคำที่คนมักเขียนผิด รอบละ 10 คำ</p>
-  </section>
-  <div class="panel">
-    <h2>เลือกโหมดเล่น</h2>
-    <div class="row">
-      <a class="btn primary" href="game.html?mode=choose">เลือกคำที่เขียนถูก</a>
-      <a class="btn primary" href="game.html?mode=type">พิมพ์คำจากคำใบ้</a>
-    </div>
-    <div id="review" style="margin-top:12px"></div>
-  </div>
-  <div class="panel"><h2>อันดับคะแนน</h2><div id="board"></div></div>
-  <div class="panel" id="hardBox" hidden><h2>คำที่คนพลาดบ่อยที่สุด</h2><div id="hard"></div></div>
-</main>
-<script src="questions.js"></script>
-<script>
-/* เมนู: แสดงอันดับ (Merge Sort) และคำที่พลาดบ่อย */
-const board=mergeSort(load("pdw-board",[]),(a,b)=>b.s-a.s).slice(0,5);
-document.getElementById("board").innerHTML=board.length
-  ?"<ol>"+board.map(e=>"<li>"+esc(e.n)+" <b>"+e.s+"</b> <span class='mute'>("+esc(e.d)+")</span></li>").join("")+"</ol>"
-  :"<p class='mute'>ยังไม่มีคะแนน เล่นรอบแรกเลย</p>";
-const hard=topMissed(5);
-if(hard.length){
-  document.getElementById("review").innerHTML="<a class='btn' href='game.html?mode=review&src=stats'>ทบทวนคำที่เคยพลาด ("+hard.length+" คำ)</a>";
-  document.getElementById("hardBox").hidden=false;
-  document.getElementById("hard").innerHTML="<ul>"+hard.map(([w,n])=>"<li class='good'>"+esc(w)+" <span class='mute'>พลาด "+n+" ครั้ง</span></li>").join("")+"</ul>";
-}
-</script>
+<div id="app">
+
+<div id="s-start" class="card">
+  <h1>✏️ ทายคำเขียนผิด</h1>
+  <p>เลือกคำที่สะกดถูกให้ไวที่สุด!</p>
+  <p><small>10 ข้อ · ข้อละ 10 วินาที · ตอบไวได้โบนัสเวลา</small></p>
+  <input id="name" maxlength="14" placeholder="ใส่ชื่อของคุณ">
+  <button class="big pink" onclick="startGame()">🚀 เริ่มเล่น</button>
+  <button class="big purple" onclick="showBoard()">🏆 ตารางคะแนน</button>
+</div>
+
+<div id="s-game" class="card hide">
+  <div class="hud"><span id="qno"></span><span id="score"></span><span id="tleft"></span></div>
+  <div class="bar"><div id="fill"></div></div>
+  <h2>คำไหนสะกดถูก?</h2>
+  <button id="b0" class="choice c0"></button>
+  <button id="b1" class="choice c1"></button>
+  <div id="fb" class="fb hide"></div>
+</div>
+
+<div id="s-result" class="card hide">
+  <h1>🎉 จบเกม!</h1>
+  <p id="rname"></p>
+  <div class="big-score" id="rscore"></div>
+  <p id="rinfo"></p>
+  <h2 style="margin-top:16px">คำที่ตอบผิด</h2>
+  <div id="rwrong"></div>
+  <button class="big teal" onclick="startGame()">🔁 เล่นอีกครั้ง</button>
+  <button class="big purple" onclick="showBoard()">🏆 ตารางคะแนน</button>
+</div>
+
+<div id="s-board" class="card hide">
+  <h1>🏆 ตารางคะแนน</h1>
+  <table id="lb"></table>
+  <h2 style="margin-top:20px">😵 คำที่คนพลาดบ่อย</h2>
+  <table id="miss"></table>
+  <button class="big pink" onclick="show('s-start')">⬅ กลับหน้าแรก</button>
+  <p><small>คะแนนเก็บในเบราว์เซอร์เครื่องนี้ (localStorage)</small></p>
+</div>
+
+</div>
+
+<script src="js/words.js"></script>
+<script src="js/datastructures.js"></script>
+<script src="js/game.js"></script>
 </body>
 </html>
