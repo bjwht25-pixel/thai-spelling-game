@@ -3,18 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>เกมทายคำไทย มักเขียนผิด!</title>
-    <!-- Tailwind CSS -->
+    <title>เขียนผิดได้ไง!</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts (Kanit & Prompt) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&family=Prompt:wght@400;600;700&display=swap" rel="stylesheet">
-    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Canvas Confetti -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <!-- Animate.css -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 
     <script>
@@ -96,13 +92,12 @@
 
     <div id="app" class="w-full max-w-lg">
 
-        <!-- ================= START SCREEN ================= -->
         <div id="start-screen" class="glass-card rounded-3xl p-6 sm:p-8 text-center animate__animated animate__fadeIn">
             <div class="inline-block p-4 bg-purple-100 rounded-full mb-3 text-purple-600 text-4xl shadow-inner">
                 <i class="fa-solid fa-spell-check animate__animated animate__bounceIn"></i>
             </div>
-            <h1 class="text-3xl sm:text-4xl font-bold text-gray-800 mb-2 font-prompt">เขียนถูกหรือเขียนผิด?</h1>
-            <p class="text-gray-600 mb-6 text-sm sm:text-base">ทดสอบความแม่นภาษาไทย 10 ข้อ ลุยเลย!</p>
+            <h1 class="text-3xl sm:text-4xl font-bold text-gray-800 mb-2 font-prompt">คนไทยNative</h1>
+            <p class="text-gray-600 mb-6 text-sm sm:text-base">ทดสอบความเป็นคนไทยในตัวคุณ</p>
 
             <form id="start-form" onsubmit="startGame(event)" class="space-y-4">
                 <div class="text-left">
@@ -111,31 +106,28 @@
                         <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-400">
                             <i class="fa-solid fa-user"></i>
                         </span>
-                        <input type="text" id="player-name" required maxlength="15" placeholder="ตัวอย่าง: นกฮูกใจดี" 
+                        <input type="text" id="player-name" required maxlength="15" placeholder="น้องชื่ออะไร" 
                             class="w-full pl-10 pr-4 py-3 rounded-2xl border-2 border-purple-200 focus:border-purple-500 focus:outline-none transition-colors bg-white/80 text-gray-800 text-lg">
                     </div>
                 </div>
 
                 <button type="submit" class="w-full py-3.5 px-6 bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white font-bold text-lg rounded-2xl shadow-lg btn-bounce flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-play"></i> เริ่มเล่นเกมเลย!
+                    <i class="fa-solid fa-play"></i> เริ่ม!
                 </button>
             </form>
 
-            <!-- Leaderboard Mini View on Start -->
             <div class="mt-8 pt-6 border-t border-purple-100">
                 <div class="flex items-center justify-between mb-3">
                     <h3 class="font-semibold text-gray-700 flex items-center gap-2">
-                        <i class="fa-solid fa-trophy text-yellow-500"></i> อันดับสูงสุด (Top 5)
+                        <i class="fa-solid fa-trophy text-yellow-500"></i> ใครคือคนไทยคนแรก
                     </h3>
                     <button onclick="clearLeaderboard()" class="text-xs text-gray-400 hover:text-red-500 underline">ล้างสถิติ</button>
                 </div>
                 <div id="start-leaderboard" class="space-y-2 text-sm text-gray-600 max-h-40 overflow-y-auto pr-1">
-                    <!-- Dynamic leaderboard content -->
                 </div>
             </div>
         </div>
 
-        <!-- ================= GAME SCREEN ================= -->
         <div id="game-screen" class="glass-card rounded-3xl p-6 sm:p-8 hidden">
             <!-- Top Bar: Progress & Timer -->
             <div class="flex items-center justify-between mb-4">
@@ -227,7 +219,7 @@
 
             <!-- Restart Button -->
             <button onclick="resetGameToStart()" class="w-full py-3.5 px-6 bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white font-bold text-lg rounded-2xl shadow-lg btn-bounce flex items-center justify-center gap-2">
-                <i class="fa-solid fa-rotate-right"></i> เล่นอีกครั้ง (กรอกชื่อใหม่)
+                <i class="fa-solid fa-rotate-right"></i> เล่นอีกครั้ง 
             </button>
         </div>
 
@@ -439,7 +431,7 @@
             }
 
             // Show feedback timeout
-            showFeedback(false, `หมดเวลาสะสม! คำที่ถูกต้องคือ <strong>"${q.correct}"</strong><br><span class="text-xs text-gray-600">${q.desc}</span>`);
+            showFeedback(false, `หมดเวลา! คำที่ถูกต้องคือ <strong>"${q.correct}"</strong><br><span class="text-xs text-gray-600">${q.desc}</span>`);
 
             setTimeout(nextQuestion, 1500);
         }
